@@ -5,6 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "eslint": "^7.0.0",
+    "express": "^4.17.1",
     "glob": "^7.1.6",
     "govuk-frontend": "^3.6.0",
     "gray-matter": "^4.0.2",
@@ -19,13 +20,13 @@
     "precss": "mkdir -p docs/css",
     "css": "./node_modules/.bin/node-sass css/main.scss docs/css/digital-land.css --output-style=compressed",
     "preassets": "mkdir -p docs/assets",
-    "assets": "cp -r ./node_modules/govuk-frontend/govuk/assets/images docs/assets/images",
+    "assets": "cp -r ./node_modules/govuk-frontend/govuk/assets/images docs/assets",
     "prejavascript": "mkdir -p docs/javascript",
     "javascript": "./node_modules/.bin/uglifyjs ./node_modules/govuk-frontend/govuk/all.js javascript/digital-land.js --compress -o docs/javascript/digital-land.js",
     "pretemplates": "mkdir -p docs",
     "templates": "node compilers/content.js",
     "prestart": "npm run all",
-    "start": "./node_modules/.bin/http-server ./docs",
+    "start": "node server.js",
     "all": "npm run css && npm run assets && npm run javascript && npm run templates"
   },
   "repository": {
