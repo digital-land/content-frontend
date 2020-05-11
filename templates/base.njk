@@ -1,0 +1,61 @@
+{% extends "govuk/template.njk" %}
+
+{%- block pageTitle -%}
+  {%- if params.breadcrumbs -%}
+    {%- for breadcrumb in params.breadcrumbs | reverse -%}
+      {%- if loop.last -%}
+        {{ breadcrumb.text }}
+      {%- else -%}
+        {{ breadcrumb.text }} |&nbsp;
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endif -%}
+{%- endblock -%}
+
+{% block head %}
+  <link href="/css/digital-land.css" rel="stylesheet">
+  <meta name="description" content="{{ content | trim | striptags | truncate(160) }}">
+{% endblock %}
+
+{% block header %}
+  {% include "components/header.njk" %}
+{% endblock %}
+
+{% block beforeContent %}
+  {% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
+  {{ govukPhaseBanner({
+    tag: {
+      text: "prototype"
+    },
+    html: 'This is a new service – your <a class="govuk-link" href="#">feedback</a> will help us to improve it.'
+  }) }}
+
+  {% if params.breadcrumbs %}
+    {% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
+    {{ govukBreadcrumbs({
+      items: params.breadcrumbs
+    }) }}
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  {% if params.breadcrumbs %}
+    {% set heading = params.breadcrumbs | last %}
+    {% if params.captionHeading %}
+      <h1 class="govuk-heading-xl">
+        <span class="govuk-caption-xl">{{ params.captionHeading }} </span>
+        {{ heading.text }}
+      </h1>
+    {% else %}
+      <h1 class="govuk-heading-xl">{{ heading.text }}</h1>
+    {% endif %}
+  {% endif %}
+{% endblock %}
+
+{% block footer %}
+  {% include "components/footer.njk" %}
+{% endblock %}
+
+{% block bodyEnd %}
+  {% include "components/scripts.njk" %}
+{% endblock %}

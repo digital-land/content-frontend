@@ -1,0 +1,13 @@
+{% from "govuk/components/footer/macro.njk" import govukFooter %}
+
+{{ govukFooter({
+  meta: {
+    items: [
+      {
+        href: "/cookies",
+        text: "Cookies"
+      }
+    ],
+    html: 'This site has been built using <a href="https://github.com/digital-land" class="govuk-footer__link">open source software</a>, contributions are welcome.'
+  }
+}) }}
