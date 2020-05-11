@@ -13,7 +13,7 @@
 {%- endblock -%}
 
 {% block head %}
-  <link href="/css/digital-land.css" rel="stylesheet">
+  <link href="{{ resourceUrl }}/css/digital-land.css" rel="stylesheet">
   <meta name="description" content="{{ content | trim | striptags | truncate(160) }}">
 {% endblock %}
 

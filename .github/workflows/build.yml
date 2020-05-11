@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - uses: actions/setup-node
+    - uses: actions/setup-node@v1
       with:
         node-version: '12.x'
     - name: Setup git
@@ -29,7 +29,7 @@ jobs:
     - name: Install dependencies
       run: npm install
     - name: Build frontend assets
-      run: npm run all
+      run: RESOURCE_URL=/content-frontend npm run all
     - name: Commit files
       run: |
         git add docs

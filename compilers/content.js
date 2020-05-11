@@ -56,7 +56,9 @@ const actions = {
           breadcrumbs,
           captionHeading: (breadcrumbs.length > 2) ? breadcrumbs[breadcrumbs.length - 2].text : false
         },
-        matter: matter.data
+        matter: matter.data,
+        resourceUrl: process.env.RESOURCE_URL || '',
+        assetPath: (process.env.RESOURCE_URL || '') + '/assets'
       }
 
       // If there's an index with no content, it's probably a list page
