@@ -4,15 +4,15 @@
 const markdown = require('markdown-it')()
 
 markdown.use(require('markdown-it-container'), 'inset-text', {
-  validate: function (params) {
+  validate (params) {
     return params.trim().match(/^inset\s+(.*)$/)
   },
-  render: function (tokens, idx) {
-    var m = tokens[idx].info.trim().match(/^inset\s+(.*)$/)
+  render (tokens, idx) {
+    const m = tokens[idx].info.trim().match(/^inset\s+(.*)$/)
 
     if (tokens[idx].nesting === 1) {
       // opening tag
-      return '<div class="govuk-inset-text">' + markdown.renderInline(m[1]) + '\n'
+      return `<div class="govuk-inset-text">${markdown.renderInline(m[1])}\n`
     } else {
       // closing tag
       return '</div>\n'
@@ -22,9 +22,7 @@ markdown.use(require('markdown-it-container'), 'inset-text', {
 })
 
 // Use the default renderer to attach rules to
-const defaultRender = (tokens, idx, options, env, self) => {
-  return self.renderToken(tokens, idx, options)
-}
+const defaultRender = (tokens, idx, options, env, self) => self.renderToken(tokens, idx, options)
 
 // Custom renderers
 // Heading
