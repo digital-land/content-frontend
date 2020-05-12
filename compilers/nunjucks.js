@@ -8,7 +8,7 @@ const path = require('path')
     - date-filter
  */
 nunjucks.configure([
-  path.join(__dirname, '../node_modules/govuk-frontend/'),
+  path.dirname(require.resolve('govuk-frontend/README.md')),
   path.join(__dirname, '../templates/'),
   path.join(__dirname, '../templates/components/')
 ], {
