@@ -1,6 +1,7 @@
 # content-frontend
 
 [![License](https://img.shields.io/github/license/mashape/apistatus.svg)](LICENSE)
+
 A quick compiler to take Markdown files and output a Digital Land template
 
 ## Requirements
