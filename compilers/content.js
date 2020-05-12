@@ -41,7 +41,6 @@ const actions = {
       }]
 
       const contents = fs.readFileSync(file, 'utf8')
-      const filename = file.replace('content/', '').replace('.md', '')
       const matter = graymatter(contents)
       const content = markdown.render(matter.content)
       const pageCrumb = [{
@@ -61,14 +60,22 @@ const actions = {
         assetPath: (process.env.RESOURCE_URL || '') + '/assets'
       }
 
+      const filename = file.replace('content/', '').replace('.md', '')
+
       // If there's an index with no content, it's probably a list page
       if (filename === 'index' && content.length === 0) {
         console.log('list', actions.getAllContent())
         // todo
       }
 
+      let directory = ''
+      if (filename !== 'index') {
+        directory = filename
+        fs.mkdirSync('./docs/' + directory, { recursive: true })
+      }
+
       const rendered = nunjucks.render('content.njk', data)
-      return fs.writeFileSync(`./docs/${filename}.html`, rendered)
+      return fs.writeFileSync(`./docs/${directory}/index.html`, rendered)
     })
   }
 }
