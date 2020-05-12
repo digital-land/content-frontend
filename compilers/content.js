@@ -5,21 +5,23 @@ const markdown = require('./markdown.js')
 const nunjucks = require('./nunjucks.js')
 
 const actions = {
-  generateBreadcrumbs (pages, indexMatter) {
-    let breadcrumbs = [{
+  generateBreadcrumbs (page, index) {
+    // TODO: Fix breadcrumb links
+    const breadcrumbs = [{
       text: 'Digital Land',
       href: '/'
-    }].concat(indexMatter)
+    }]
 
-    let isIndex = false
-    for (const crumb of breadcrumbs) {
-      if (crumb.text === pages[0].text) {
-        isIndex = true
-      }
-    }
+    breadcrumbs.push({
+      text: index.matter.title,
+      href: '/'
+    })
 
-    if (!isIndex) {
-      breadcrumbs = breadcrumbs.concat(pages)
+    if (page.directory !== './docs/') {
+      breadcrumbs.push({
+        text: page.matter.title,
+        href: '/'
+      })
     }
 
     return breadcrumbs.map((crumb, index) => {
@@ -30,54 +32,36 @@ const actions = {
     })
   },
   getAllContent () {
-    return glob.sync('content/**.md')
+    return glob.sync('content/**.md').map(file => {
+      const filename = file.replace('content/', '').replace('.md', '')
+      const directory = (filename === 'index') ? '' : filename
+      const content = fs.readFileSync(file, 'utf8')
+      const matter = graymatter(content)
+      return {
+        directory: `./docs/${directory}`,
+        filename: 'index.html',
+        matter: matter.data,
+        params: {},
+        markdown: matter.content,
+        content: markdown.render(matter.content),
+        resourceUrl: process.env.RESOURCE_URL || '',
+        assetPath: `${process.env.RESOURCE_URL || ''}/assets`
+      }
+    })
   },
   render () {
-    return actions.getAllContent().map(file => {
-      const indexMatter = graymatter(fs.readFileSync('content/index.md'))
-      const indexCrumb = [{
-        href: '/',
-        text: indexMatter.data.title
-      }]
+    const allContent = actions.getAllContent()
+    const index = allContent.find(file => file.directory === './docs/')
 
-      const contents = fs.readFileSync(file, 'utf8')
-      const matter = graymatter(contents)
-      const content = markdown.render(matter.content)
+    return allContent.map(file => {
+      // Generate breadcrumbs and caption headings
+      const breadcrumbs = actions.generateBreadcrumbs(file, index)
+      file.params.breadcrumbs = breadcrumbs
+      file.params.captionHeading = (breadcrumbs.length > 2) ? breadcrumbs[breadcrumbs.length - 2].text : false
 
-      const pageCrumb = [{
-        href: '/',
-        text: matter.data.title
-      }]
-      const breadcrumbs = actions.generateBreadcrumbs(pageCrumb, indexCrumb)
-
-      const data = {
-        content,
-        params: {
-          breadcrumbs,
-          captionHeading: (breadcrumbs.length > 2) ? breadcrumbs[breadcrumbs.length - 2].text : false
-        },
-        matter: matter.data,
-        resourceUrl: process.env.RESOURCE_URL || '',
-        assetPath: (process.env.RESOURCE_URL || '') + '/assets'
-      }
-
-      const filename = file.replace('content/', '').replace('.md', '')
-
-      // If there's an index with no content, it's probably a list page
-      if (filename === 'index' && content.length === 0) {
-        console.log('list', actions.getAllContent())
-        // todo
-      }
-
-      let directory = ''
-      if (filename !== 'index') {
-        directory = filename
-        fs.mkdirSync('./docs/' + directory, { recursive: true })
-      }
-
-      const rendered = nunjucks.render('content.njk', data)
-
-      return fs.writeFileSync(`./docs/${directory}/index.html`, rendered)
+      const render = nunjucks.render('content.njk', file)
+      fs.mkdirSync(file.directory, { recursive: true })
+      return fs.writeFileSync(`${file.directory}/${file.filename}`, render)
     })
   }
 }

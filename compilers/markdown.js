@@ -108,4 +108,10 @@ markdown.renderer.rules.td_open = (tokens, idx, options, env, self) => {
   return defaultRender(tokens, idx, options, env, self)
 }
 
+// Horizontal rule
+markdown.renderer.rules.hr = (tokens, idx, options, env, self) => {
+  tokens[idx].attrPush(['class', 'govuk-section-break govuk-section-break--l govuk-section-break--visible'])
+  return defaultRender(tokens, idx, options, env, self)
+}
+
 module.exports = markdown
