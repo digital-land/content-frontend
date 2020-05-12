@@ -44,8 +44,7 @@ const actions = {
         params: {},
         markdown: matter.content,
         content: markdown.render(matter.content),
-        resourceUrl: process.env.RESOURCE_URL || '',
-        assetPath: `${process.env.RESOURCE_URL || ''}/assets`
+        assetPath: '/content-frontend/assets'
       }
     })
   },
