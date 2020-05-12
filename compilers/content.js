@@ -43,6 +43,7 @@ const actions = {
       const contents = fs.readFileSync(file, 'utf8')
       const matter = graymatter(contents)
       const content = markdown.render(matter.content)
+
       const pageCrumb = [{
         href: '/',
         text: matter.data.title
@@ -75,6 +76,7 @@ const actions = {
       }
 
       const rendered = nunjucks.render('content.njk', data)
+
       return fs.writeFileSync(`./docs/${directory}/index.html`, rendered)
     })
   }

@@ -3,6 +3,24 @@
 */
 const markdown = require('markdown-it')()
 
+markdown.use(require('markdown-it-container'), 'inset-text', {
+  validate: function (params) {
+    return params.trim().match(/^inset\s+(.*)$/)
+  },
+  render: function (tokens, idx) {
+    var m = tokens[idx].info.trim().match(/^inset\s+(.*)$/)
+
+    if (tokens[idx].nesting === 1) {
+      // opening tag
+      return '<div class="govuk-inset-text">' + markdown.renderInline(m[1]) + '\n'
+    } else {
+      // closing tag
+      return '</div>\n'
+    }
+  },
+  marker: ':'
+})
+
 // Use the default renderer to attach rules to
 const defaultRender = (tokens, idx, options, env, self) => {
   return self.renderToken(tokens, idx, options)
@@ -66,6 +84,12 @@ markdown.renderer.rules.thead_open = (tokens, idx, options, env, self) => {
   return defaultRender(tokens, idx, options, env, self)
 }
 
+// Table th
+markdown.renderer.rules.th_open = (tokens, idx, options, env, self) => {
+  tokens[idx].attrPush(['class', 'govuk-table__header'])
+  return defaultRender(tokens, idx, options, env, self)
+}
+
 // Table row
 markdown.renderer.rules.tr_open = (tokens, idx, options, env, self) => {
   tokens[idx].attrPush(['class', 'govuk-table__row'])
@@ -75,6 +99,12 @@ markdown.renderer.rules.tr_open = (tokens, idx, options, env, self) => {
 // Table body
 markdown.renderer.rules.tbody_open = (tokens, idx, options, env, self) => {
   tokens[idx].attrPush(['class', 'govuk-table__body'])
+  return defaultRender(tokens, idx, options, env, self)
+}
+
+// Table td
+markdown.renderer.rules.td_open = (tokens, idx, options, env, self) => {
+  tokens[idx].attrPush(['class', 'govuk-table__cell'])
   return defaultRender(tokens, idx, options, env, self)
 }
 
