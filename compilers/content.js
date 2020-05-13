@@ -58,6 +58,18 @@ const actions = {
       file.params.breadcrumbs = breadcrumbs
       file.params.captionHeading = (breadcrumbs.length > 2) ? breadcrumbs[breadcrumbs.length - 2].text : false
 
+      // Generate child pages
+      if (file.matter.list && file.matter.list === 'pages') {
+        file.params.pages = allContent.map(function (page) {
+          return {
+            url: page.directory.replace('./docs/', ''),
+            title: page.matter.title
+          }
+        }).filter(function (page) {
+          return page.url
+        })
+      }
+
       const render = nunjucks.render('content.njk', file)
       fs.mkdirSync(file.directory, { recursive: true })
       return fs.writeFileSync(`${file.directory}/${file.filename}`, render)

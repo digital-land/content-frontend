@@ -26,6 +26,14 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       {{ content | safe }}
+
+      {%- if params.pages -%}
+        <ul class="govuk-list govuk-list--bullet">
+          {% for page in params.pages | sort(false, true, 'title') %}
+            <li><a href="{{ page.url }}" class="govuk-link">{{ page.title }}</a></li>
+          {% endfor %}
+        </ul>
+      {% endif %}
     </div>
   </div>
 {% endblock %}
