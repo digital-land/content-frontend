@@ -1,6 +1,7 @@
 const fs = require('fs')
 const glob = require('glob')
 const graymatter = require('gray-matter')
+const markdownlint = require('markdownlint')
 const markdown = require('./markdown.js')
 const nunjucks = require('./nunjucks.js')
 
@@ -37,6 +38,19 @@ const actions = {
       const directory = (filename === 'index') ? '' : filename
       const content = fs.readFileSync(file, 'utf8')
       const matter = graymatter(content)
+      const lint = markdownlint.sync({
+        files: [file],
+        config: {
+          'line-length': false
+        }
+      })
+
+      const lintString = lint.toString(true)
+
+      if (lintString) {
+        console.log('Markdownlint: warning, may not compile correctly:\n', lintString)
+      }
+
       return {
         directory: `./docs/${directory}`,
         filename: 'index.html',
