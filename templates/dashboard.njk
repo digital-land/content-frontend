@@ -5,34 +5,32 @@
 {% block content %}
   {{ super() }}
 
-  <h2 class="govuk-heading-l">Workflows</h2>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <h2 class="govuk-heading-l">Repositories</h2>
 
-  {% for repository in data %}
-    <h3 class="govuk-heading-m">{{ repository.name }}</h3>
+      {% if type === 'index' %}
+        {{ govukTable({
+          head: tableHead,
+          rows: tableRows
+        }) }}
+      {% else %}
+        {% for repository in data %}
+          <h3 class="govuk-heading-m" id="{{ repository.name }}"><a href="{{ repository.html_url }}" class="govuk-link">{{ repository.name }}</a></h3>
 
-    {% if repository.workflows.total_count %}
-      {{ govukTable({
-        caption: "Runs",
-        firstCellIsHeader: false,
-        head: [
-          {
-            text: "Started at"
-          },
-          {
-            text: "Ended at"
-          },
-          {
-            text: "Elapsed"
-          },
-          {
-            text: "Outcome"
-          }
-        ],
-        rows: repository.workflows.workflow_runs
-      }) }}
-    {% else %}
-      <p class="govuk-body">The {{ repository.name }} repository does not have any workflows.</p>
-    {% endif %}
-  {% endfor %}
+          {% if repository.workflows.data.total_count %}
+            {{ govukTable({
+              caption: "Runs",
+              firstCellIsHeader: false,
+              head: tableHead,
+              rows: repository.workflows.data.workflow_runs
+            }) }}
+          {% else %}
+            <p class="govuk-body">The {{ repository.name }} repository does not have any workflows.</p>
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    </div>
+  </div>
 
 {% endblock %}
