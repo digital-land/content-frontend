@@ -1,6 +1,7 @@
 {% extends "base.njk" %}
 
 {% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
 
 {% block content %}
   {{ super() }}
@@ -14,7 +15,7 @@
           head: tableHead,
           rows: tableRows
         }) }}
-      {% else %}
+      {% elseif type === 'drilldown' %}
         {% for repository in data %}
           <h3 class="govuk-heading-m" id="{{ repository.name }}"><a href="{{ repository.html_url }}" class="govuk-link">{{ repository.name }}</a></h3>
 
@@ -27,6 +28,48 @@
             }) }}
           {% else %}
             <p class="govuk-body">The {{ repository.name }} repository does not have any workflows.</p>
+          {% endif %}
+        {% endfor %}
+      {% else %}
+        {% for repository in data %}
+          {% if repository.has_pages %}
+            <h3 class="govuk-heading-m" id="{{ repository.name }}"><a href="{{ repository.html_url }}" class="govuk-link">{{ repository.name }}</a></h3>
+
+            {{ govukTable({
+              firstCellIsHeader: false,
+              head: [
+                {
+                  text: "URL"
+                },
+                {
+                  text: "Source"
+                }
+              ],
+              rows: [
+                [
+                  {
+                    html: '<a href="' + repository.pages.data.html_url + '" class="govuk-link">'+ repository.pages.data.html_url +'</a>'
+                  },
+                  {
+                    text: repository.pages.data.source.branch + ' from directory ' + repository.pages.data.source.path
+                  }
+                ]
+              ]
+            }) }}
+
+            {% if repository.pages_files %}
+              {{ govukDetails({
+                summaryText: 'URLs under ' + repository.name,
+                html: '<ul class="govuk-list">' + repository.pages_files + '</ul>'
+              }) }}
+            {% endif %}
+
+            {% if repository.screenshot_url %}
+              {{ govukDetails({
+                summaryText: 'Screenshot of ' + repository.name,
+                html: '<img src="/operations-dashboard/screenshots/' + repository.screenshot_url + '" width="100%" loading="lazy">'
+              }) }}
+            {% endif %}
           {% endif %}
         {% endfor %}
       {% endif %}
