@@ -17,6 +17,10 @@
   <meta name="description" content="{{ content | trim | striptags | truncate(160) }}">
 {% endblock %}
 
+{% block bodyStart %}
+  {% include "components/cookie-banner.njk" %}
+{% endblock %}
+
 {% block header %}
   {% include "components/header.njk" %}
 {% endblock %}
