@@ -60,7 +60,7 @@ const actions = {
 
       return {
         directory: `./docs/${directory}`,
-        filename: filename.endsWith('.html') ? filename : `${filename}.html`,
+        filename: filename.endsWith('.html') ? filename : `index.html`,
         matter: matter.data,
         params: {},
         markdown: matter.content,
