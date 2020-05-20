@@ -1,0 +1,11 @@
+#global-cookie-message {
+  background-color: #f3f2f1;
+  padding: 20px 0;
+  box-sizing: border-box;
+  display: none;
+}
+
+// If a user has JavaScript turned off, we can't use cookies anyway, so only show the global banner in JS is enabled
+.js-enabled #global-cookie-message {
+  display: block;
+}

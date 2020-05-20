@@ -1,0 +1,26 @@
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+<div id="global-cookie-message">
+  <div class="govuk-width-container">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <h2 class="govuk-heading-m">Tell us whether you accept cookies</h2>
+        <p class="govuk-body">We use <a href="/cookies" class="govuk-link">cookies to collect information</a> about how the Digital Land website is used.</p>
+
+        {{ govukButton({
+          text: "Accept all cookies",
+          element: "button",
+          type: "submit",
+          attributes: {
+            "data-accept-cookies": "essentials,analytics"
+          }
+        }) }}
+
+        {{ govukButton({
+          text: "Set cookie preferences",
+          href: "/cookies"
+        }) }}
+      </div>
+    </div>
+  </div>
+</div>

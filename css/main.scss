@@ -4,3 +4,6 @@ $govuk-font-family: "Helvetica", Arial, sans-serif;
 $govuk-assets-path: "/content-frontend/assets/";
 
 @import "node_modules/govuk-frontend/govuk/all";
+
+// Custom components
+@import "cookie-banner"
