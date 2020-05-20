@@ -15,8 +15,8 @@
     "nunjucks-date-filter": "^0.1.1"
   },
   "devDependencies": {
-    "eslint": "^7.0.0",
     "node-sass": "^4.14.1",
+    "standard": "^14.3.4",
     "uglify-js": "^3.9.2"
   },
   "scripts": {
@@ -24,7 +24,7 @@
     "css": "./node_modules/.bin/node-sass css/main.scss docs/css/digital-land.css --output-style=compressed",
     "preassets": "mkdir -p docs/assets",
     "assets": "cp -r ./node_modules/govuk-frontend/govuk/assets/images docs/assets",
-    "prejavascript": "mkdir -p docs/javascript",
+    "prejavascript": "mkdir -p docs/javascript && ./node_modules/.bin/standard javascript",
     "javascript": "./node_modules/.bin/uglifyjs ./node_modules/govuk-frontend/govuk/all.js javascript/digital-land.js --compress -o docs/javascript/digital-land.js",
     "pretemplates": "mkdir -p docs",
     "templates": "node compilers/content.js",
