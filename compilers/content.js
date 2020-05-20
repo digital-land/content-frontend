@@ -4,10 +4,10 @@ const graymatter = require('gray-matter')
 const markdownlint = require('markdownlint')
 const markdown = require('./markdown.js')
 const nunjucks = require('./nunjucks.js')
+const packageJson = require(process.cwd() + '/package.json')
 
 const actions = {
   generateBreadcrumbs (page, index) {
-    // TODO: Fix breadcrumb links
     const breadcrumbs = [{
       text: 'Digital Land',
       href: '/'
@@ -15,7 +15,7 @@ const actions = {
 
     breadcrumbs.push({
       text: index.matter.title,
-      href: '/'
+      href: '/' + packageJson.name
     })
 
     if (page.directory === './docs/') {
