@@ -18,12 +18,14 @@ const actions = {
       href: '/'
     })
 
-    if (page.directory !== './docs/') {
-      breadcrumbs.push({
-        text: page.matter.title,
-        href: '/'
-      })
+    if (page.directory === './docs/') {
+      breadcrumbs.pop()
     }
+
+    breadcrumbs.push({
+      text: page.matter.title,
+      href: '/'
+    })
 
     return breadcrumbs.map((crumb, index) => {
       if (index === (breadcrumbs.length - 1)) {
@@ -34,8 +36,8 @@ const actions = {
   },
   getAllContent () {
     return glob.sync('content/**.md').map(file => {
-      const filename = file.replace('content/', '').replace('.md', '')
-      const directory = (filename === 'index') ? '' : filename
+      let filename = file.replace('content/', '').replace('.md', '')
+      let directory = (filename === 'index') ? '' : filename
       const content = fs.readFileSync(file, 'utf8')
       const matter = graymatter(content)
       const lint = markdownlint.sync({
@@ -51,9 +53,14 @@ const actions = {
         console.log('Markdownlint: warning, may not compile correctly:\n', lintString)
       }
 
+      if (matter.data.permalink) {
+        directory = ''
+        filename = matter.data.permalink
+      }
+
       return {
         directory: `./docs/${directory}`,
-        filename: 'index.html',
+        filename: filename.endsWith('.html') ? filename : `${filename}.html`,
         matter: matter.data,
         params: {},
         markdown: matter.content,
@@ -64,7 +71,7 @@ const actions = {
   },
   render () {
     const allContent = actions.getAllContent()
-    const index = allContent.find(file => file.directory === './docs/')
+    const index = allContent.find(file => (file.directory === './docs/' && file.filename === 'index.html'))
 
     return allContent.map(file => {
       // Generate breadcrumbs and caption headings
@@ -74,14 +81,10 @@ const actions = {
 
       // Generate child pages
       if (file.matter.list && file.matter.list === 'pages') {
-        file.params.pages = allContent.map(function (page) {
-          return {
-            url: page.directory.replace('./docs/', ''),
-            title: page.matter.title
-          }
-        }).filter(function (page) {
-          return page.url
-        })
+        file.params.pages = allContent.map(page => ({
+          url: page.directory.replace('./docs/', ''),
+          title: page.matter.title
+        })).filter(page => page.url)
       }
 
       const render = nunjucks.render('content.njk', file)
