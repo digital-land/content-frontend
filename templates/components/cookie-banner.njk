@@ -5,10 +5,10 @@
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
         <h2 class="govuk-heading-m">Tell us whether you accept cookies</h2>
-        <p class="govuk-body">We use <a href="/cookies" class="govuk-link">cookies to collect information</a> about how the Digital Land website is used.</p>
+        <p class="govuk-body">We use <a href="/cookies" class="govuk-link">analytics cookies to collect information</a> about how the Digital Land website is used.</p>
 
         {{ govukButton({
-          text: "Accept all cookies",
+          text: "Accept analytics cookies",
           element: "button",
           type: "submit",
           attributes: {
@@ -17,8 +17,12 @@
         }) }}
 
         {{ govukButton({
-          text: "Set cookie preferences",
-          href: "/cookies"
+          text: "Reject analytics cookies",
+          element: "button",
+          type: "submit",
+          attributes: {
+            "data-accept-cookies": "essentials"
+          }
         }) }}
       </div>
     </div>
