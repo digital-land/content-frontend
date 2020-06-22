@@ -17,7 +17,7 @@
   "devDependencies": {
     "node-sass": "^4.14.1",
     "standard": "^14.3.4",
-    "uglify-js": "^3.9.4"
+    "uglify-js": "^3.10.0"
   },
   "scripts": {
     "precss": "mkdir -p docs/css",
