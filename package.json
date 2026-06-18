@@ -8,7 +8,7 @@
     "glob": "^7.1.6",
     "govuk-frontend": "^3.7.0",
     "gray-matter": "^4.0.2",
-    "markdown-it": "^11.0.0",
+    "markdown-it": "^12.3.2",
     "markdown-it-container": "^3.0.0",
     "markdownlint": "^0.20.3",
     "nunjucks": "^3.2.1",
